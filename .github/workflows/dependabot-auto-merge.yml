@@ -1,0 +1,20 @@
+name: Create issue for Dependabot PR
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      repository-projects: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Step 1 -> Code Checkout
+        uses: actions/checkout@v3
+      - name: Step 2 -> Create Issue if PR is created by Dependabot
+        # if: github.event.pull_request.user.login  == 'dependabot[bot]'
+        run: gh pr merge --auto --merge "https://github.com/SwagataChaudhuri/Dependabot/pull/1" # Use Github CLI to merge automatically the PR
+        
