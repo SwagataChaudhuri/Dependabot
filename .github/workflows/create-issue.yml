@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Step 1 -> Code Checkout
         uses: actions/checkout@v3
-      - name: Step 2 -> Create issue if Dependabot PR
+      - name: Step 2 -> Create Issue if PR is created by Dependabot
         if: github.event.pull_request.user.login  == 'dependabot[bot]'
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
