@@ -1,0 +1,29 @@
+name: CreateDependabotIssue
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [ opened, reopened]
+
+jobs:
+  issue:
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        issues: write
+        repository-projects: read 
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      steps:
+        - uses: actions/checkout@v3
+        - name: Open issue if Dependabot PR
+          if: github.event.pull_request.user.login  == 'dependabot[bot]'
+          env:
+            pr_title: ${{github.event.pull_request.title}}
+            pr_number: ${{github.event.pull_request.number}}
+            pr_url: ${{github.event.pull_request.url}}
+          run: |
+            title="Dependabot PR  - $pr_title opened"
+            body="The below issue is created as Dependabot has opened PR #$pr_number
+            Link: $pr_url
+            Please review and merge the PR as per the review guidelines."
+            gh issue create --title "$title" --body "$body" --assignee "${{ github.repository_owner }}"
