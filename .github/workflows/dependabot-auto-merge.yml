@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Step 1 -> Code Checkout
         uses: actions/checkout@v3
-      - name: Step 2 -> Create Issue if PR is created by Dependabot
+      - name: Step 2 -> Approve the PR if created by Dependabot
         # if: github.event.pull_request.user.login  == 'dependabot[bot]'
-        run: gh pr merge --auto --merge "https://github.com/SwagataChaudhuri/Dependabot/pull/1" # Use Github CLI to merge automatically the PR
+        run: gh pr review 1 --approve       
+      - name: Step 3 -> Merge the PR if created by Dependabot
+        # if: github.event.pull_request.user.login  == 'dependabot[bot]'
+        run:  gh pr merge 1 -d -r
