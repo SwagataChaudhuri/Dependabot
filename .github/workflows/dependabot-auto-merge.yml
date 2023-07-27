@@ -1,6 +1,7 @@
 name: Auto Merge Dependabot PR
 on:
-  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
   build:
@@ -15,9 +16,10 @@ jobs:
     steps:
       - name: Step 1 -> Code Checkout
         uses: actions/checkout@v3
-      - name: Step 2 -> Approve the PR if created by Dependabot
-        # if: github.event.pull_request.user.login  == 'dependabot[bot]'
-        run: gh pr review 1 --approve       
-      - name: Step 3 -> Merge the PR if created by Dependabot
-        # if: github.event.pull_request.user.login  == 'dependabot[bot]'
-        run:  gh pr merge 1 -d -r
+      - name: Step 2 -> Approve & Merge the PR if created by Dependabot
+        if: github.event.pull_request.user.login  == 'dependabot[bot]'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}     
+        run: |
+          gh pr review $PR_NUMBER --approve
+          gh pr merge $PR_NUMBER -d -r    
