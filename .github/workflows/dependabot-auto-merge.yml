@@ -8,7 +8,7 @@ jobs:
     permissions:
       contents: read
       issues: write
-      repository-projects: read
+      repository-projects: write
       pull-requests: write
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
